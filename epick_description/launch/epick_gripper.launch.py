@@ -113,11 +113,26 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
     )
 
+    # Rviz
+    rviz_config_file = PathJoinSubstitution(
+        [FindPackageShare(description_package_param), "config", "view.rviz"]
+    )
+
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        parameters=[{'use_sim_time': False}],
+        arguments=["-d", rviz_config_file]
+    )
+
     nodes_to_start = [
         controller_manager,
         epick_controller_spawner,
         epick_status_controller_spawner,
         robot_state_publisher_node,
+        rviz_node
     ]
     return nodes_to_start
 
